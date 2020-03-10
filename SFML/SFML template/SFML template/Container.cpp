@@ -2,7 +2,7 @@
 
 void Container::DrawContainer(Board& board,sf::RenderWindow &createwindow)
 {
-	xPosLeftLimit = ((board.GetXTilesNum() - ContainerWidth) / 2);	//start position of container in x acoordinates
+	xPosLeftLimit = ((board.GetXTilesNum() - ContainerWidth) / 2);	//start position of container in x coordinates
 	xPosRightLimit = xPosLeftLimit + ContainerWidth;
 	yPosBottomLimit = yPosTopLimit + ContainerHeight;
 	

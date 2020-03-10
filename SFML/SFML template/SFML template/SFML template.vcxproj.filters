@@ -33,6 +33,9 @@
     <ClInclude Include="Location.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="TetrominoPatterns.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Shape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TetrominoPatterns.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

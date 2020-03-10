@@ -19,11 +19,6 @@ void Game::render() {		//rendering
 		
 
 	
-	
-	
-	
-	
-
 	createwindow.display();
 	
 }
@@ -40,12 +35,15 @@ void Game::update() {		//update game
 	
 	
 if (FrameCounter >= FrameTimer) {			//process logic here
-	
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {		//rotate shape is enter is pressed
+		shape.rotateShape();
+	}
+
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {		//if the left key is pressed.
 		if (!shape.CollisionCheck({ -1 , 0 }, container,board)) {		//checks for collision for the next pos
 			shape.moveShape({ -1 , 0 });
 		}
-
 	}
 			
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {

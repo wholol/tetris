@@ -20,7 +20,7 @@ private:
 
 	int screenheight;
 	int screenwidth;			
-	std::vector<std::unique_ptr<sf::RectangleShape>> grid;		//pointer of grids	
+	std::vector<sf::RectangleShape> grid;		//pointer of grids	
 	
 
 	static constexpr float CellDimension = 20.0f;
