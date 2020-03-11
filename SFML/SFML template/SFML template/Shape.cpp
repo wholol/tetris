@@ -32,19 +32,26 @@ Shape::Shape(const Board& board)
 		ColorVectorElement += 1;
 	}
 
+	//std::for_each(LockShapeMap.begin(), LockShapeMap.end(), [](const std::pair<int, int>& y) {std::cout << y.first << "      " << y.second << std::endl; });
+	
 
 	Tetrominos = tetrominos.getTetrominoPatterns();	//assign Ttrominos vector to the patterns
-
-	ShapeNumber = ShapeType(rng);
-
+	//std::cout << Tetrominos.size() << std::endl;	//sanity check: print size of tetromino 3D vector
+	initShapeNumber = ShapeType(rng);	
+	ShapeNumber = initShapeNumber;
+	
+	rotationCounter = 0;
 	ShapeLoc = { 4 , -4 };		//location of the TOP left array corner
 		
 }
 
 void Shape::initShape() {
 	ShapeLoc = { 4 , -4 };		//restsart the shape 
-	ShapeNumber = ShapeType(rng);		//rng the shape number between 5 and 6.
-	ShapeRotationNumber = ShapeNumber;
+	initShapeNumber = ShapeType(rng);		//rng the shape number between 5 and 6.
+	//std::cout << initShapeNumber << std::endl;
+	ShapeNumber = initShapeNumber;
+	rotationCounter = 0;
+	//std::cout << ShapeNumber << std::endl;
 }
 
 void Shape::lockShape(Board& board, const Container& container,sf::RenderWindow& createwindow)
@@ -54,7 +61,7 @@ void Shape::lockShape(Board& board, const Container& container,sf::RenderWindow&
 		for (int j = 0; j < board.GetYTilesNum(); ++j) {
 			
 			int CollisionVectorNumber = CollisionMapVector[i * board.GetXTilesNum() + j];			//get the number for collistion vector
-			auto GetShapeNumber = LockShapeMap.find(CollisionVectorNumber);		//find the number in th map
+			auto GetShapeNumber = LockShapeMap.find(CollisionVectorNumber);		//find the shape that needs to be locked
 			
 			if (GetShapeNumber == LockShapeMap.end()) {
 				//do nothing if the there is no locking
@@ -70,6 +77,7 @@ void Shape::lockShape(Board& board, const Container& container,sf::RenderWindow&
 
 void Shape::CollisionMapVectorStatus(Board& board, const Container& container)		//checks the vector for collision possibilities, ( only gets called if the piece cannot move down)
 {	
+
 	for (int row = 0; row < Tetrominos[ShapeNumber].size(); ++row) {		
 		for (int col = 0; col < Tetrominos[ShapeNumber][row].size(); ++col) {
 			if (Tetrominos[ShapeNumber][row][col] == 1) {			//if there is a piece present
@@ -77,13 +85,13 @@ void Shape::CollisionMapVectorStatus(Board& board, const Container& container)		
 			}
 		}
 	}
+
 }
 
 
 
 void Shape::removeRow(Board& board, const Container& container)
 {
-	
 	for (int row = container.GetyPosTopLimit(); row <= container.GetyPosBottomLimit(); ++row) {	//each row
 		bool RowDetected = true;			//assume that there is a row already
 		for (int col = container.GetxPosLeftLimit() + 1; col <= container.GetxPosRightLimit() - 1; ++col) {	//each column
@@ -100,30 +108,38 @@ void Shape::removeRow(Board& board, const Container& container)
 			
 		}
 	}	
+
+	
 }
 
 
 void Shape::drawShape(Board& board,const Container &container,sf::RenderWindow &createwindow)		//draw shape onto board
 {
+	
 	for (int row = 0; row < Tetrominos[ShapeNumber].size(); ++row) {
 		for (int col = 0; col < Tetrominos[ShapeNumber][row].size(); ++col) {
 			if (Tetrominos[ShapeNumber][row][col] == 1) {			// if the tetrominos vector has a one to it
-			board.DrawTiles(container.GetxPosLeftLimit() + ShapeLoc.x + col , container.GetyPosTopLimit() + ShapeLoc.y + row , createwindow,colorVector[ShapeNumber]);	//draw it to the screen for movement
+			board.DrawTiles(container.GetxPosLeftLimit() + ShapeLoc.x + col , container.GetyPosTopLimit() + ShapeLoc.y  + row , createwindow,colorVector[ShapeNumber % 7]);	//draw it to the screen for movement
 			}
 		}
-	}	
+	}
+
 }
 
 bool Shape::CollisionCheck(Location delta_loc,const Container& container,Board& board)
 {
 	Location CollisionCheck = ShapeLoc;
-	CollisionCheck += delta_loc;		//add delta loc = checks th future position for collisions
+	Location disable_delta = { -1000 , -1000 };
+	if (delta_loc != disable_delta) {
+		CollisionCheck += delta_loc;		//add delta loc = checks th future position for collisions
+	}
+	
 	for (int row = 0; row < Tetrominos[ShapeNumber].size(); ++row) {
 		for (int col = 0; col < Tetrominos[ShapeNumber][row].size(); ++col) {
 			if (Tetrominos[ShapeNumber][row][col] == 1) {
 
 				//case 1: hits the conainer walls
-				if (container.GetxPosLeftLimit() + CollisionCheck.x + col <= container.GetxPosLeftLimit()
+				if (container.GetxPosLeftLimit() + CollisionCheck.x + col  <= container.GetxPosLeftLimit() 
 					|| container.GetxPosLeftLimit() + CollisionCheck.x + col >= container.GetxPosRightLimit()
 					|| container.GetyPosTopLimit() + CollisionCheck.y + row >= container.GetyPosBottomLimit()) {
 					return true;
@@ -134,12 +150,8 @@ bool Shape::CollisionCheck(Location delta_loc,const Container& container,Board& 
 				if (CollisionMapVector[(container.GetxPosLeftLimit() + CollisionCheck.x + col) * (board.GetXTilesNum()) + container.GetyPosTopLimit() + CollisionCheck.y + row] != 0) {
 					return true;
 				}
-
-
 			}
-
 		}
-
 	}
 	return false;
 }
@@ -149,18 +161,51 @@ void Shape::moveShape(Location delta_loc)
 	ShapeLoc += delta_loc;
 }
 
-void Shape::rotateShape()
+void Shape::rotateShape()		//no colision detection for shape rotation
 {
-
-	ShapeNumber += 1;
 	rotationCounter += 1;
+
+	std::cout << ShapeNumber << std::endl;
+
+	if (rotationCounter != 4 && ShapeNumber < 21) {		//if the piece is at 0 degrees
+		
+		auto getShapeNumber = LockShapeMap.find(ShapeNumber + 1);		//find the shapenumber
+		if (getShapeNumber == LockShapeMap.end()) {
+			//do nothing if not found
+		}
+
+		else {
+			ShapeNumber = getShapeNumber->first - 1;		//assign ShapeRotationNumber
+			ShapeNumber += 7;
+			std::cout << "ShapeNumber:" << ShapeNumber << std::endl;
+			std::cout << "rotationCounter" << rotationCounter << std::endl;
+		}
+	}
+
+	
 
 	if (rotationCounter == 4) {		//if the shape goes back to zero degrees
 		rotationCounter = 0;
-		ShapeNumber = ShapeRotationNumber;		//reset the shape position to zero
+		auto getShapeNumber = LockShapeMap.find(ShapeNumber + 1);		//find the shapenumber
+		if (getShapeNumber == LockShapeMap.end()) {
+			//do nothing if not found
+		}
+
+		else {
+			ShapeNumber = (getShapeNumber->first - 1) % 7;		//reset the shape position to zero
+			std::cout << "reset shape pos:" << ShapeNumber << std::endl;
+		}	
 	}
 
+
 }
+
+Location Shape::GetShapeLoc() const
+{
+	return ShapeLoc;
+}
+
+
 
 
 

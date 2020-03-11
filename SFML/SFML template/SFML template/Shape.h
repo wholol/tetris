@@ -19,6 +19,8 @@ public:
 	bool CollisionCheck(Location delta_loc, const Container& container, Board& board);
 	void moveShape(Location delta_loc);			//move shape by delta_loc
 	void rotateShape();
+	Location GetShapeLoc() const;
+
 
 private:
 	TetrominoPatterns tetrominos;		//get the tetrominos
@@ -28,9 +30,10 @@ private:
 	Location ShapeLoc;			//initialzie the array location for the top left corner
 	std::mt19937 rng;			//rng 
 	std::uniform_int_distribution<int> ShapeType;	//distrubition int for shape type needed.
-	int ShapeNumber;				//shape number for cases purposes.
-	int ShapeRotationNumber;		//stores the rotation number for a shape
+	int ShapeNumber;				//shape number for rotated piece purposes.
+	int initShapeNumber;		//initializes the rotation number for a shape
 	int rotationCounter = 0;			//stores the current rotation postion for th tetris block
+	
 
 	std::vector<std::vector<std::vector<int>>> Tetrominos;			//tetrominos shape (3D vector to store initial shapes)
 	std::vector<int> CollisionMapVector;							//maps the collisino vector. Marks one for collided, zero if not collided

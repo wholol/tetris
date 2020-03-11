@@ -27,11 +27,12 @@ private:
 	Container container;
 	Shape shape;
 
-	static constexpr int FrameTimer = 17;
+	static constexpr int FrameTimer = 10;
 	int FrameCounter = 0;						//frame counter
 	bool quitgame = false;			//quit game
 	bool MainMenu = true;
 
+	
 	
 	
 	

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 
+
 Game::Game(int screenwidth, int screenheight, const std::string& title, int framerate)
 	:createwindow(sf::VideoMode(screenwidth, screenheight), title),
 	board(screenwidth,screenheight),
@@ -11,15 +12,10 @@ Game::Game(int screenwidth, int screenheight, const std::string& title, int fram
 
 void Game::render() {		//rendering
 
-	
-
 		container.DrawContainer(board, createwindow);
 		shape.drawShape(board, container, createwindow);
 		shape.lockShape(board, container, createwindow);
-		
-
-	
-	createwindow.display();
+		createwindow.display();
 	
 }
 
@@ -33,39 +29,53 @@ void Game::update() {		//update game
 	++FrameCounter;
 	
 	
-	
+
 if (FrameCounter >= FrameTimer) {			//process logic here
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {		//rotate shape is enter is pressed
-		shape.rotateShape();
-	}
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) {		//if the left key is pressed.
 		if (!shape.CollisionCheck({ -1 , 0 }, container,board)) {		//checks for collision for the next pos
 			shape.moveShape({ -1 , 0 });
 		}
 	}
-			
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
 		if (!shape.CollisionCheck({ 1 , 0 }, container,board)) {
 			shape.moveShape({ 1 , 0 });
 		}
 	}
 
-	//if (sf::Keyboard::isKeyPressed(sf::Keyboard::))
 
-	if (!shape.CollisionCheck({ 0 , 1 }, container,board)) {		//check for downward collision
-		shape.moveShape({ 0 , 1});			
+	if (!shape.CollisionCheck({ 0 , 0.45 }, container,board)) {		//check for downward collision. if no collision occurs
+		shape.moveShape({ 0 , 0.45});								//move shape down
+	
 	}
+
 	else {		//is collision occured
 		
 		shape.CollisionMapVectorStatus(board, container);		//update the collsiino map vector as it is not falling downwards anymore.
 		shape.removeRow(board, container);
-		shape.initShape();		//initialize the shape
-
-		
+		shape.initShape();		//initialize the shape	
 	}
-			
+	
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)) {		//rotate shape is enter is pressed
+		Location disable_delta = { -1000 , -1000 };			//disable delta_loc. check shapeloc itself instead
+		shape.rotateShape();		//rotate shape first
+		if (shape.CollisionCheck(disable_delta, container, board)) {	//if collision occurs
+			if (shape.GetShapeLoc().x <= (container.GetContainerWidth() / 2)) {
+				std::cout << "wall kick" << std::endl;
+				shape.moveShape({ 1 , 0 });		//wall kick
+			}
+
+			else {
+				shape.moveShape({ -1 , 0 });		//wall kick
+
+			}
+		}
+	}
+
+	
+
 		FrameCounter = 0;
 	}
 	createwindow.clear();
@@ -85,6 +95,7 @@ bool Game::quit()			//call quit game
 			quitgame = true;
 		}
 	}
+
 	return quitgame;
 	
 }

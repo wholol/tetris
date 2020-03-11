@@ -36,8 +36,8 @@ TetrominoPatterns::TetrominoPatterns() {
 		{0,0,0,0}},
 
 		{{0,0,0,0},			//O shape		
-		{0,0,1,1},
-		{0,0,1,1},
+		{0,1,1,0},
+		{0,1,1,0},
 		{0,0,0,0}},
 
 		//90 degrees//
@@ -74,10 +74,9 @@ TetrominoPatterns::TetrominoPatterns() {
 		{0,0,1,0}},
 
 		{{0,0,0,0},			//O shape		
-		{0,0,0,0},
-		{0,0,1,1},
-		{0,0,1,1}},
-	
+		{0,1,1,0},
+		{0,1,1,0},
+		{0,0,0,0}},
 
 		// 180 degrees
 
@@ -112,9 +111,9 @@ TetrominoPatterns::TetrominoPatterns() {
 		{0,0,1,1}},
 
 		{{0,0,0,0},			//O shape		
-		{0,0,0,0},
 		{0,1,1,0},
-		{0,1,1,0}},
+		{0,1,1,0},
+		{0,0,0,0}},
 		
 		
 		//270 degrees
@@ -135,9 +134,9 @@ TetrominoPatterns::TetrominoPatterns() {
 		{0,1,1,0},
 		{0,0,1,0}},
 
-		{{0,0,0,0},			//I shape 		
-		{0,1,1,1},
-		{0,0,0,0},
+		{{0,0,1,0},			//I shape 		
+		{0,0,1,0},
+		{0,0,1,0},
 		{0,0,0,0}},
 
 		{{0,1,0,0},			//J shape									
@@ -157,9 +156,6 @@ TetrominoPatterns::TetrominoPatterns() {
 	
 	};
 	
-
-
-
 }
 
 std::vector<std::vector<std::vector<int>>> TetrominoPatterns::getTetrominoPatterns() const {		//gt the tetrominos

@@ -2,8 +2,8 @@
 
 
 struct Location {
-	int x;
-	int y;
+	double x;
+	double y;
 
 
 
@@ -11,5 +11,9 @@ struct Location {
 		x = x + other.x;
 		y = y + other.y;
 		return *this;
+	}
+
+	bool operator !=(const Location other) const {
+		return (x != other.x && y != other.y);
 	}
 };
