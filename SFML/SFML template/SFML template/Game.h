@@ -5,6 +5,7 @@
 #include "Container.h"
 #include "Shape.h"
 
+
 class Game {			//game class. should have render, update/events, quit and initialize.
 
 public:
@@ -26,6 +27,7 @@ private:
 	Board board;
 	Container container;
 	Shape shape;
+	bool GameOver = false;
 
 	static constexpr int FrameTimer = 10;
 	int FrameCounter = 0;						//frame counter
@@ -37,7 +39,7 @@ private:
 	
 	
 	
-	bool GameOver = false;				//gameover boolean
+
 
 
 };

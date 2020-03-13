@@ -12,10 +12,16 @@ Game::Game(int screenwidth, int screenheight, const std::string& title, int fram
 
 void Game::render() {		//rendering
 
+	if (!GameOver) {
 		container.DrawContainer(board, createwindow);
 		shape.drawShape(board, container, createwindow);
 		shape.lockShape(board, container, createwindow);
 		createwindow.display();
+	}
+
+		if (shape.GameOverCheck(container, board)) {
+			GameOver = true;
+		}
 	
 }
 
@@ -74,12 +80,12 @@ if (FrameCounter >= FrameTimer) {			//process logic here
 		}
 	}
 
-	
 
-		FrameCounter = 0;
+	FrameCounter = 0;
 	}
+
 	createwindow.clear();
-	//shape.undrawShape(board, container, createwindow);		//undraw the previous tetris shape	
+	
 
 	
 }

@@ -18,8 +18,10 @@ public:
 	void drawShape(Board& board, const Container &container, sf::RenderWindow &createwindow);		//draw the shape of the tetromino
 	bool CollisionCheck(Location delta_loc, const Container& container, Board& board);
 	void moveShape(Location delta_loc);			//move shape by delta_loc
-	void rotateShape();
+	void rotateShape();			//rotate shape
+	bool GameOverCheck(const Container& container, const Board& board);
 	Location GetShapeLoc() const;
+	
 
 
 private:

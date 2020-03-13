@@ -5,8 +5,6 @@ struct Location {
 	double x;
 	double y;
 
-
-
 	Location& operator +=(const Location& other) {
 		x = x + other.x;
 		y = y + other.y;

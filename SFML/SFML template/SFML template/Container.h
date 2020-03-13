@@ -22,6 +22,7 @@ private:
 	static constexpr int ContainerHeight = 23;		//sets the height of the container
 	static constexpr int yPosTopLimit = 5;			//top location/coordiante for the container
 
+
 	int xPosLeftLimit;		//limit for x position fr the right side of the container
 	int xPosRightLimit;		//limit for x position for the left side of the container
 	int yPosBottomLimit;	//limit for y position for the bottom of the container

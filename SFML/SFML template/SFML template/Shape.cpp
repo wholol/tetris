@@ -85,7 +85,6 @@ void Shape::CollisionMapVectorStatus(Board& board, const Container& container)		
 			}
 		}
 	}
-
 }
 
 
@@ -200,10 +199,36 @@ void Shape::rotateShape()		//no colision detection for shape rotation
 
 }
 
+bool Shape::GameOverCheck(const Container& container,const Board &board)
+{
+	int y = container.GetyPosTopLimit() - 1;
+	int xbegin = container.GetxPosLeftLimit() + 1;
+	int xend = container.GetxPosRightLimit() - 1;
+	
+
+	auto itbegin = CollisionMapVector.begin();
+	
+	for (int i = xbegin; i < xend; ++i) {
+		if (CollisionMapVector[i * board.GetXTilesNum() + y] != 0) {
+			return true;
+		}
+	}
+
+	return false;
+	
+	
+	
+	
+}
+
 Location Shape::GetShapeLoc() const
 {
 	return ShapeLoc;
 }
+
+
+
+
 
 
 
